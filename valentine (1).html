@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>💌 14 февраля</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;700&family=Caveat:wght@400;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a1a;
+            overflow: hidden;
+            font-family: 'Comfortaa', sans-serif;
+            color: #fff;
+            height: 100dvh;
+            width: 100vw;
+        }
+
+        /* ===== ЭКРАН 1: КОНВЕРТ ===== */
+        .screen-envelope {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 50%, #0f3460 100%);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .screen-envelope.hidden {
+            opacity: 0;
+            transform: scale(1.2);
+            pointer-events: none;
+        }
+
+        .envelope-hint {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 30px;
+            animation: pulse-hint 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-hint {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 220px;
+            height: 160px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:active {
+            transform: scale(0.95);
+        }
+
+        .envelope {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(145deg, #ffffff, #ff00c8);
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 10px 40px rgba(219, 118, 150, 0.575);
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 110px solid transparent;
+            border-right: 110px solid transparent;
+            border-top: 80px solid #c42ebc;
+            filter: brightness(0.85);
+            transition: transform 0.6s ease;
+            transform-origin: top center;
+        }
+
+        .envelope-wrapper:hover .envelope-flap {
+            transform: rotateX(30deg);
+        }
+
+        .envelope-heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            z-index: 2;
+            animation: envelope-heart-beat 1.2s ease-in-out infinite;
+        }
+
+        @keyframes envelope-heart-beat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.15); }
+        }
+
+        /* ===== ЭКРАН 2: ОСНОВНОЙ ===== */
+        .screen-main {
+            position: fixed;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s ease 0.5s;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+        }
+
+        .screen-main.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Фон с градиентом */
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #1a0a2e 0%, #16213e 40%, #0f3460 70%, #1a0a2e 100%);
+            z-index: -3;
+        }
+
+        /* Звёзды */
+        .stars {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
+        }
+
+        /* Плавающие сердечки */
+        .hearts-container {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -50px;
+            animation: float-up var(--dur) linear infinite;
+            opacity: 0;
+            font-size: var(--size);
+            filter: blur(0.5px);
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 0;
+                transform: translateY(0) rotate(0deg) scale(0.5);
+            }
+            10% {
+                opacity: var(--opacity);
+            }
+            90% {
+                opacity: var(--opacity);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(calc(-100dvh - 100px)) rotate(var(--rot)) scale(1);
+            }
+        }
+
+        /* Секции */
+        .section {
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            scroll-snap-align: start;
+            position: relative;
+        }
+
+        /* Секция 1: Поздравление */
+        .greeting-text {
+            text-align: center;
+            max-width: 340px;
+        }
+
+        .greeting-text .date {
+            font-size: 13px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: rgba(255, 107, 157, 0.7);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.3s;
+        }
+
+        .greeting-text h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d, #ffa8c5, #ff6b9d);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite, fadeInUp 1s ease forwards 0.6s;
+            opacity: 0;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .greeting-text .message {
+            font-size: 15px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.85);
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 0.9s;
+        }
+
+        .greeting-text .message span {
+            color: #ff6b9d;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards 1.5s;
+        }
+
+        .scroll-indicator span {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 2px;
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid rgba(255, 107, 157, 0.5);
+            border-bottom: 2px solid rgba(255, 107, 157, 0.5);
+            transform: rotate(45deg);
+            animation: bounce-arrow 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce-arrow {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(45deg) translateY(8px); }
+        }
+
+        /* Секция 2: ВОПРОС */
+        .question-section {
+            gap: 30px;
+        }
+
+        .question-text {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .question-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question-text .emoji {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: question-float 3s ease-in-out infinite;
+        }
+
+        @keyframes question-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .question-text h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 36px;
+            color: #ff6b9d;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .question-text p {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .question-buttons {
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+        }
+
+        .question-buttons.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn {
+            padding: 16px 40px;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, #ff6b9d, #ff4081);
+            color: #fff;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.5);
+        }
+
+        .btn-yes:active {
+            transform: scale(0.98);
+        }
+
+        .btn-no {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            position: relative;
+            transition: all 0.15s ease;
+        }
+
+        /* Popup "Фиг тебе" */
+        .fig-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-family: 'Caveat', cursive;
+            font-size: 72px;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.9),
+                         0 0 60px rgba(255, 107, 157, 0.6),
+                         0 4px 10px rgba(0, 0, 0, 0.5);
+            z-index: 300;
+            pointer-events: none;
+            animation: fig-appear 1s ease forwards;
+            opacity: 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fig-emoji {
+            font-size: 60px;
+            filter: grayscale(1) brightness(0.3);
+        }
+
+        @keyframes fig-appear {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-10deg);
+                opacity: 0;
+            }
+            20% {
+                transform: translate(-50%, -50%) scale(1.3) rotate(5deg);
+                opacity: 1;
+            }
+            40% {
+                transform: translate(-50%, -50%) scale(1) rotate(-3deg);
+                opacity: 1;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0) rotate(10deg);
+                opacity: 0;
+            }
+        }
+
+        .answer-result {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .answer-result.show {
+            display: flex;
+            opacity: 1;
+        }
+
+        .answer-content {
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.5s ease;
+        }
+
+        .answer-result.show .answer-content {
+            transform: scale(1);
+        }
+
+        .answer-content .big-emoji {
+            font-size: 100px;
+            animation: answer-pop 0.6s ease forwards;
+        }
+
+        @keyframes answer-pop {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .answer-content h2 {
+            font-family: 'Caveat', cursive;
+            font-size: 48px;
+            color: #ff6b9d;
+            margin: 20px 0;
+        }
+
+        .answer-content p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 350px;
+            line-height: 1.6;
+        }
+
+        .continue-btn {
+            margin-top: 30px;
+            padding: 14px 36px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4081);
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Comfortaa', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .continue-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Секция 3: Картинка */
+        .photo-section {
+            position: relative;
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 260px;
+            height: 340px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(255, 107, 157, 0.3), 0 0 80px rgba(255, 107, 157, 0.1);
+            opacity: 0;
+            transform: translateY(40px) scale(0.9);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .photo-frame.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            z-index: 1;
+        }
+
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 23px;
+            background: linear-gradient(135deg, rgba(255,107,157,0.4), transparent, rgba(255,168,197,0.4));
+            z-index: -1;
+            animation: glow-rotate 4s linear infinite;
+        }
+
+        @keyframes glow-rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .photo-caption {
+            margin-top: 24px;
+            font-family: 'Caveat', cursive;
+            font-size: 24px;
+            color: rgba(255, 168, 197, 0.9);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+        }
+
+        .photo-caption.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Секция 4: План на день */
+        .date-plan-section {
+            gap: 30px;
+            padding: 60px 24px;
+        }
+
+        .plan-title {
+            font-family: 'Caveat', cursive;
+            font-size: 38px;
+            color: #ff6b9d;
+            text-align: center;
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .plan-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 107, 157, 0.2);
+            border-radius: 20px;
+            padding: 0;
+            max-width: 340px;
+            width: 100%;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .plan-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .plan-card:nth-child(3) {
+            transition-delay: 0.2s;
+        }
+
+        .plan-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .plan-content {
+            padding: 20px 24px 24px;
+        }
+
+        .plan-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ff6b9d, #ff4081);
+            border-radius: 50%;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .plan-place {
+            font-family: 'Caveat', cursive;
+            font-size: 28px;
+            color: #ffa8c5;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .plan-time {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .plan-address {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+            margin-bottom: 0;
+        }
+
+        .plan-footer {
+            font-family: 'Caveat', cursive;
+            font-size: 26px;
+            color: rgba(255, 168, 197, 0.9);
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.4s, transform 1s ease 0.4s;
+        }
+
+        .plan-footer.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Секция 4: Пожелания - УДАЛЕНО */
+        /* Секция 5: Финал */
+        .final-section {
+            position: relative;
+        }
+
+        .final-heart {
+            font-size: 80px;
+            animation: final-beat 1.5s ease-in-out infinite;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .final-heart.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes final-beat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+        }
+
+        .final-text {
+            font-family: 'Caveat', cursive;
+            font-size: 32px;
+            color: #ff6b9d;
+            margin-top: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+        }
+
+        .final-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .final-sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 12px;
+            opacity: 0;
+            transition: opacity 1s ease 0.6s;
+        }
+
+        .final-sub.visible {
+            opacity: 1;
+        }
+
+        /* Конфетти */
+        .confetti-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .confetti {
+            position: absolute;
+            top: -10px;
+            width: var(--size);
+            height: var(--size);
+            background: var(--color);
+            opacity: 0;
+            animation: confetti-fall var(--dur) ease-in forwards;
+            animation-delay: var(--delay);
+        }
+
+        @keyframes confetti-fall {
+            0% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100dvh) rotate(var(--rot));
+            }
+        }
+
+        /* Sparkles */
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle-pop 0.6s ease forwards;
+        }
+
+        @keyframes sparkle-pop {
+            0% { transform: scale(0); opacity: 1; }
+            50% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Частицы вокруг фото */
+        .photo-particles {
+            position: absolute;
+            inset: -40px;
+            pointer-events: none;
+        }
+
+        .photo-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff6b9d;
+            border-radius: 50%;
+            animation: orbit var(--dur) linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes orbit {
+            0% { transform: rotate(0deg) translateX(var(--radius)) rotate(0deg); }
+            100% { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg); }
+        }
+
+        /* Кнопка управления музыкой */
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 107, 157, 0.15);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .music-control:hover {
+            background: rgba(255, 107, 157, 0.25);
+            border-color: rgba(255, 107, 157, 0.5);
+            transform: scale(1.05);
+        }
+
+        .music-control:active {
+            transform: scale(0.95);
+        }
+
+        .music-icon {
+            font-size: 22px;
+            transition: transform 0.3s ease;
+        }
+
+        .music-control.playing .music-icon {
+            animation: music-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes music-pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Аудио плеер -->
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Кнопка управления музыкой -->
+    <div class="music-control playing" id="musicControl" onclick="toggleMusic()">
+        <div class="music-icon">🎵</div>
+    </div>
+
+    <!-- ЭКРАН 1: КОНВЕРТ -->
+    <div class="screen-envelope" id="envelopeScreen">
+        <div class="envelope-hint">нажми на конверт 💌</div>
+        <div class="envelope-wrapper" id="envelope" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">
+                    <div class="envelope-heart">💖</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЭКРАН 2: ОСНОВНОЙ -->
+    <div class="screen-main" id="mainScreen">
+        <div class="bg-gradient"></div>
+        <div class="stars" id="stars"></div>
+        <div class="hearts-container" id="hearts"></div>
+        <div class="confetti-container" id="confetti"></div>
+
+        <!-- Секция 1: ВОПРОС -->
+        <div class="section question-section">
+            <div class="question-text" data-animate>
+                <div class="emoji">🌹</div>
+                <h2>Пойдёшь со мной<br>гулять 14 февраля?</h2>
+                <p>Было бы здорово провести этот день вместе 💕</p>
+            </div>
+            <div class="question-buttons" data-animate>
+                <button class="btn btn-yes" onclick="answerYes()">Да! 💖</button>
+                <button class="btn btn-no" id="btnNo">Нет</button>
+            </div>
+            <div class="scroll-indicator">
+                <span>листай вниз</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+
+        <!-- Секция 2: Поздравление -->
+        <div class="section">
+            <div class="greeting-text">
+                <div class="date">14 февраля</div>
+                <h1>С Днём Святого Валентина! 💝</h1>
+                <p class="message">
+                    Хочу поздравить тебя с этим тёплым днём! 
+                    Пусть вокруг тебя всегда будут люди, 
+                    которые <span>ценят</span> и <span>любят</span> тебя 
+                    так же сильно, как ты того заслуживаешь ✨
+                </p>
+            </div>
+            <div class="scroll-indicator">
+                <span>листай вниз</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+
+        <!-- Секция 3: Картинка -->
+        <div class="section photo-section">
+            <div class="photo-frame" id="photoFrame">
+                <!-- ↓ ЗАМЕНИ photo.jpg НА ТВОЮ КАРТИНКУ ↓ -->
+                <img src="photo.jpg" alt="💖" />
+                <div class="photo-particles" id="photoParticles"></div>
+            </div>
+            <div class="photo-caption" id="photoCaption">Ты просто невероятная 🌸</div>
+            <div class="scroll-indicator">
+                <span>листай вниз</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+
+        <!-- Секция 4: План на день -->
+        <div class="section date-plan-section">
+            <div class="plan-title" data-animate>Наш план на 14 февраля 💕</div>
+            
+            <div class="plan-card" data-animate>
+                <!-- ↓ ЗАМЕНИ cinema.jpg НА ФОТО КИНОТЕАТРА ↓ -->
+                <img src="cinema.jpg" alt="Кино" class="plan-photo">
+                <div class="plan-content">
+                    <div class="plan-number">1</div>
+                    <div class="plan-place">Кино 🎬</div>
+                    <div class="plan-time">⏰ 18:00</div>
+                    <div class="plan-address">📍 Кинотеатр "Название"<br>ул. Примерная, 123</div>
+                </div>
+            </div>
+
+            <div class="plan-card" data-animate>
+                <!-- ↓ ЗАМЕНИ restaurant.jpg НА ФОТО РЕСТОРАНА ↓ -->
+                <img src="restaurant.jpg" alt="Ресторан" class="plan-photo">
+                <div class="plan-content">
+                    <div class="plan-number">2</div>
+                    <div class="plan-place">Ресторан 🍽️</div>
+                    <div class="plan-time">⏰ 20:30</div>
+                    <div class="plan-address">📍 Ресторан "Название"<br>ул. Примерная, 456</div>
+                </div>
+            </div>
+
+            <div class="plan-footer" data-animate>Буду ждать тебя 🌹</div>
+
+            <div class="scroll-indicator">
+                <span>листай вниз</span>
+                <div class="scroll-arrow"></div>
+            </div>
+        </div>
+
+        <!-- Секция 5: Финал -->
+        <div class="section final-section">
+            <div class="final-heart" id="finalHeart">💗</div>
+            <div class="final-text" id="finalText">С праздником! 🌹</div>
+            <div class="final-sub" id="finalSub">— специально для тебя —</div>
+        </div>
+    </div>
+
+    <!-- Экран ответа -->
+    <div class="answer-result" id="answerResult">
+        <div class="answer-content">
+            <div class="big-emoji">🎉</div>
+            <h2>Ура!</h2>
+            <p>Не могу дождаться! Это будет замечательный день 💕</p>
+            <button class="continue-btn" onclick="closeAnswer()">Продолжить ✨</button>
+        </div>
+    </div>
+
+    <script>
+        // ===== МУЗЫКА =====
+        const bgMusic = document.getElementById('bgMusic');
+        const musicControl = document.getElementById('musicControl');
+        let musicStarted = false;
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicControl.classList.add('playing');
+                musicControl.querySelector('.music-icon').textContent = '🎵';
+            } else {
+                bgMusic.pause();
+                musicControl.classList.remove('playing');
+                musicControl.querySelector('.music-icon').textContent = '⏸️';
+            }
+        }
+
+        function startMusic() {
+            if (!musicStarted) {
+                bgMusic.currentTime = 12; // Начать с 12 секунды
+                bgMusic.play().catch(e => {
+                    console.log('Autoplay blocked:', e);
+                    // Если автозапуск заблокирован, попробуем при первом клике
+                    document.addEventListener('click', function playOnClick() {
+                        if (!musicStarted) {
+                            bgMusic.currentTime = 12;
+                            bgMusic.play();
+                            musicStarted = true;
+                        }
+                        document.removeEventListener('click', playOnClick);
+                    }, { once: true });
+                });
+                musicStarted = true;
+            }
+        }
+
+        // ===== ЗВЁЗДЫ =====
+        function createStars() {
+            const container = document.getElementById('stars');
+            for (let i = 0; i < 80; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.setProperty('--dur', (2 + Math.random() * 4) + 's');
+                star.style.animationDelay = Math.random() * 4 + 's';
+                star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+                container.appendChild(star);
+            }
+        }
+
+        // ===== ПЛАВАЮЩИЕ СЕРДЕЧКИ =====
+        function createFloatingHearts() {
+            const container = document.getElementById('hearts');
+            const heartSymbols = ['💕', '💖', '💗', '💓', '❤️', '🩷', '🤍', '✨', '🩵'];
+
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.setProperty('--dur', (6 + Math.random() * 8) + 's');
+                heart.style.setProperty('--size', (14 + Math.random() * 20) + 'px');
+                heart.style.setProperty('--opacity', (0.2 + Math.random() * 0.4));
+                heart.style.setProperty('--rot', (Math.random() * 360 - 180) + 'deg');
+                heart.style.animationDelay = '0s';
+                container.appendChild(heart);
+
+                setTimeout(() => heart.remove(), 15000);
+            }, 800);
+        }
+
+        // ===== КОНФЕТТИ =====
+        function launchConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#ff6b9d', '#ffa8c5', '#ff4081', '#e91e63', '#fff', '#ffd1dc', '#c51162', '#ff80ab'];
+
+            for (let i = 0; i < 60; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.setProperty('--size', (4 + Math.random() * 8) + 'px');
+                piece.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                piece.style.setProperty('--dur', (1.5 + Math.random() * 2.5) + 's');
+                piece.style.setProperty('--delay', Math.random() * 0.8 + 's');
+                piece.style.setProperty('--rot', (Math.random() * 720) + 'deg');
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                container.appendChild(piece);
+
+                setTimeout(() => piece.remove(), 5000);
+            }
+        }
+
+        // ===== ЧАСТИЦЫ ВОКРУГ ФОТО =====
+        function createPhotoParticles() {
+            const container = document.getElementById('photoParticles');
+            if (!container) return;
+            for (let i = 0; i < 8; i++) {
+                const p = document.createElement('div');
+                p.className = 'photo-particle';
+                p.style.left = '50%';
+                p.style.top = '50%';
+                p.style.setProperty('--dur', (3 + Math.random() * 4) + 's');
+                p.style.setProperty('--radius', (140 + Math.random() * 40) + 'px');
+                p.style.animationDelay = (i * 0.5) + 's';
+                p.style.width = p.style.height = (2 + Math.random() * 4) + 'px';
+                container.appendChild(p);
+            }
+        }
+
+        // ===== ОТКРЫТИЕ КОНВЕРТА =====
+        function openEnvelope() {
+            const envelope = document.getElementById('envelopeScreen');
+            const main = document.getElementById('mainScreen');
+
+            envelope.classList.add('hidden');
+            main.classList.add('active');
+
+            // Запускаем музыку
+            startMusic();
+
+            // Вибрация (если поддерживается)
+            if (navigator.vibrate) navigator.vibrate(100);
+
+            setTimeout(() => {
+                createStars();
+                createFloatingHearts();
+                createPhotoParticles();
+                launchConfetti();
+            }, 300);
+
+            // Повторные конфетти
+            setTimeout(launchConfetti, 2000);
+        }
+
+        // ===== КНОПКА "НЕТ" УБЕГАЕТ =====
+        let noButtonMoved = false;
+        const btnNo = document.getElementById('btnNo');
+        
+        function moveNoButton(e) {
+            if (e) e.preventDefault();
+            
+            // Показываем "Фиг тебе"
+            const popup = document.createElement('div');
+            popup.className = 'fig-popup';
+            popup.innerHTML = '<span>Фиг тебе</span><span class="fig-emoji">🖕</span>';
+            document.body.appendChild(popup);
+            
+            // Скрываем кнопку "Нет"
+            const btn = document.getElementById('btnNo');
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+            
+            // Удаляем popup и кнопку через 1 секунду
+            setTimeout(() => {
+                popup.remove();
+                btn.style.display = 'none';
+            }, 1000);
+            
+            if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
+            
+            noButtonMoved = true;
+        }
+
+        // Добавляем обработчики для кнопки "Нет"
+        if (btnNo) {
+            btnNo.addEventListener('mouseenter', moveNoButton);
+            btnNo.addEventListener('touchstart', moveNoButton);
+            btnNo.addEventListener('click', (e) => {
+                e.preventDefault();
+                moveNoButton(e);
+            });
+        }
+
+        // ===== ОТВЕТ "ДА" =====
+        function answerYes() {
+            const result = document.getElementById('answerResult');
+            result.classList.add('show');
+            launchConfetti();
+            setTimeout(launchConfetti, 500);
+            setTimeout(launchConfetti, 1000);
+            
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        }
+
+        // ===== ЗАКРЫТЬ ОТВЕТ =====
+        function closeAnswer() {
+            const result = document.getElementById('answerResult');
+            result.classList.remove('show');
+            
+            // Плавный скролл к секции поздравления
+            setTimeout(() => {
+                const sections = document.querySelectorAll('.section');
+                if (sections[1]) { // Вторая секция - поздравление
+                    sections[1].scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 300);
+        }
+
+        // ===== INTERSECTION OBSERVER ДЛЯ АНИМАЦИЙ =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+
+                    // Конфетти на финальной секции
+                    if (entry.target.id === 'finalHeart') {
+                        launchConfetti();
+                    }
+                }
+            });
+        }, { threshold: 0.3 });
+
+        // Наблюдаем за элементами
+        document.querySelectorAll('.photo-frame, .photo-caption, [data-animate], .final-heart, .final-text, .final-sub').forEach(el => {
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.wish-card').forEach(el => observer.observe(el));
+
+        // ===== SPARKLES ПО ТАПУ =====
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 6; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = (e.clientX + (Math.random() - 0.5) * 40) + 'px';
+                sparkle.style.top = (e.clientY + (Math.random() - 0.5) * 40) + 'px';
+                sparkle.style.background = ['#ff6b9d', '#ffa8c5', '#fff', '#ff4081'][Math.floor(Math.random() * 4)];
+                sparkle.style.width = sparkle.style.height = (3 + Math.random() * 5) + 'px';
+                document.body.appendChild(sparkle);
+                setTimeout(() => sparkle.remove(), 600);
+            }
+        });
+    </script>
+</body>
+</html>
