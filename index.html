@@ -677,7 +677,105 @@
             transform: translateY(0);
         }
 
-        /* Секция 4: Пожелания - УДАЛЕНО */
+        /* Подсказка с мыслями */
+        .thought-tooltip {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 107, 157, 0.2);
+            border: 2px solid rgba(255, 107, 157, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+            vertical-align: middle;
+        }
+
+        .thought-tooltip:hover {
+            background: rgba(255, 107, 157, 0.3);
+            border-color: rgba(255, 107, 157, 0.6);
+            transform: scale(1.1);
+        }
+
+        .thought-icon {
+            font-size: 14px;
+            font-weight: 700;
+            color: #ff6b9d;
+        }
+
+        .thought-bubble {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 16px;
+            padding: 16px 20px;
+            min-width: 280px;
+            max-width: 320px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* Для карточек - позиционируем справа */
+        .plan-card .thought-bubble {
+            left: auto;
+            right: -10px;
+            transform: translateX(0) scale(0);
+            min-width: 260px;
+        }
+
+        .plan-card .thought-tooltip:hover .thought-bubble {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+        }
+
+        .plan-card .thought-bubble::after {
+            left: auto;
+            right: 20px;
+            transform: translateX(0);
+        }
+
+        .thought-tooltip:hover .thought-bubble {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .thought-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid rgba(255, 255, 255, 0.95);
+        }
+
+        .thought-text {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.6;
+            text-align: center;
+            font-family: 'Comfortaa', sans-serif;
+        }
+
+        .thought-emoji {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        /* Секция 5: Финал - УДАЛЕНО */
         /* Секция 5: Финал */
         .final-section {
             position: relative;
@@ -930,7 +1028,7 @@
                 <img src="photo.jpg" alt="💖" />
                 <div class="photo-particles" id="photoParticles"></div>
             </div>
-            <div class="photo-caption" id="photoCaption">Ты просто невероятная 🌸</div>
+            <div class="photo-caption" id="photoCaption">Ты просто шикарно, Люблю тебя🌸</div>
             <div class="scroll-indicator">
                 <span>листай вниз</span>
                 <div class="scroll-arrow"></div>
@@ -942,28 +1040,53 @@
             <div class="plan-title" data-animate>Наш план на 14 февраля 💕</div>
             
             <div class="plan-card" data-animate>
-                <!-- ↓ ЗАМЕНИ cinema.jpg НА ФОТО КИНОТЕАТРА ↓ -->
                 <img src="cinema.jpg" alt="Кино" class="plan-photo">
                 <div class="plan-content">
                     <div class="plan-number">1</div>
-                    <div class="plan-place">Кино 🎬</div>
-                    <div class="plan-time">⏰ 18:00</div>
-                    <div class="plan-address">📍 Кинотеатр "Название"<br>ул. Примерная, 123</div>
+                    <div class="plan-place">
+                        Кино "Пейыш" 🎬
+                        <span class="thought-tooltip">
+                            <span class="thought-icon">!</span>
+                            <div class="thought-bubble">
+                                <div class="thought-emoji">💭</div>
+                                <div class="thought-text">Можем другое место сходить, если у тебя есть идеи или ты не хочешь идти на этот фильм</div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="plan-time">⏰ 18:10</div>
+                    <div class="plan-address">📍 Keruen City<br>улица Маметовой, 4</div>
                 </div>
             </div>
 
             <div class="plan-card" data-animate>
-                <!-- ↓ ЗАМЕНИ restaurant.jpg НА ФОТО РЕСТОРАНА ↓ -->
                 <img src="restaurant.jpg" alt="Ресторан" class="plan-photo">
                 <div class="plan-content">
                     <div class="plan-number">2</div>
-                    <div class="plan-place">Ресторан 🍽️</div>
-                    <div class="plan-time">⏰ 20:30</div>
-                    <div class="plan-address">📍 Ресторан "Название"<br>ул. Примерная, 456</div>
+                    <div class="plan-place">
+                        Ресторан GOGOL 🍽️
+                        <span class="thought-tooltip">
+                            <span class="thought-icon">!</span>
+                            <div class="thought-bubble">
+                                <div class="thought-emoji">💭</div>
+                                <div class="thought-text">Мы точно опоздаем в общагу. У меня идеи закончились, куда можно пойти после этого</div>
+                            </div>
+                        </span>
+                    </div>
+                    <div class="plan-time">⏰ 21:00</div>
+                    <div class="plan-address">📍 Проспект Алии Молдагуловой, 30Б</div>
                 </div>
             </div>
 
-            <div class="plan-footer" data-animate>Буду ждать тебя 🌹</div>
+            <div class="plan-footer" data-animate>
+                Буду ждать тебя 🌹
+                <span class="thought-tooltip">
+                    <span class="thought-icon">!</span>
+                    <div class="thought-bubble">
+                        <div class="thought-emoji">💭</div>
+                        <div class="thought-text">Да, знаю, у меня много проколов в плане. Меня всё это бесило эти последние дни, но мне бы щас просто хотелось провести с тобой время. Конечно же, ты можешь написать, куда ты хотела пойти, но не могла всегда</div>
+                    </div>
+                </span>
+            </div>
 
             <div class="scroll-indicator">
                 <span>листай вниз</span>
@@ -984,7 +1107,7 @@
         <div class="answer-content">
             <div class="big-emoji">🎉</div>
             <h2>Ура!</h2>
-            <p>Не могу дождаться! Это будет замечательный день 💕</p>
+            <p>Спасибо большое что пойдешь со мной, хоть и у тебя не было выбора 💕</p>
             <button class="continue-btn" onclick="closeAnswer()">Продолжить ✨</button>
         </div>
     </div>
